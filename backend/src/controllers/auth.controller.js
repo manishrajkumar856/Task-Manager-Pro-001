@@ -50,7 +50,7 @@ export const loginController = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
-            message: "User register successfully.",
+            message: "User loggedin successfully.",
             user,
         });
     } catch (error) {
