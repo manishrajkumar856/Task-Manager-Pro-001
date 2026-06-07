@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { getMe, loginUser, registerUser } from '../service/auth.api';
 import { useDispatch } from "react-redux";
 import { addUser } from '../state/auth.slice';
+import { getMeThunk, loginThunk, registerThunk } from '../state/auth.thunk';
 
 const useAuth = () => {
 
@@ -15,35 +16,31 @@ const useAuth = () => {
     } = useForm();
 
     const onLoginSubmit = async (data) => {
-        try {
-            const response = await loginUser({ email: data.email, password: data.password });
-            dispatch(addUser(response.user));
-        } catch (error) {
-            console.log(error);
-        }
+        
+        dispatch(
+            loginThunk({
+                email: data.email,
+                password: data.password
+            })
+        )
         reset();
     }
 
     const onRegisterSubmit = async (data) => {
-        try {
-            const response = await registerUser({ name: data.name, email: data.email, password: data.password });
-            console.log(response);
-            dispatch(addUser(response.user));
-        } catch (error) {
-            console.log(error);
-        }
+            
+        dispatch(
+            registerThunk({
+                name: data.name,
+                email: data.email,
+                password: data.password
+            })
+        )
         reset();
     }
 
     const getMeHandler = async () => {
-            try {
-                const response = await getMe();
-                console.log(response);
-                dispatch(addUser(response.user));
-            } catch (error) {
-                console.log(error);
-            }
-        }
+        dispatch(getMeThunk());
+    }
 
 
     return {

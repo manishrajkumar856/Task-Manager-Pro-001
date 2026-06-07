@@ -7,11 +7,6 @@ const LoginPage = () => {
 
     const { register, reset, errors, handleSubmit, onLoginSubmit } = useAuth();
 
-    const user = useSelector((state) => state.auth.user);
-
-    if(user){
-        console.log(user);
-    }
 
     return (
         <main className='w-full min-h-screen bg-black text-white flex justify-center items-center'>
