@@ -111,3 +111,36 @@ export const generateAccessTokenService = async (refreshToken) => {
         throw err;
     }
 }
+
+export const googleCallbackService = async (data) => {
+    const { id, displayName, emails, photos } = data;
+
+    try {
+        let user = await userModel.findOne({
+            email: emails[0].value,
+        });
+
+        if(!user){
+            user = await userModel.create({
+                name: displayName,
+                email: emails[0].value,
+                googleId: id
+            })
+        }
+
+        const accessToken = generateAccessToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
+
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        return {
+            accessToken,
+            refreshToken,
+            user
+        }
+        
+    } catch (error) {
+        throw error;
+    }
+}

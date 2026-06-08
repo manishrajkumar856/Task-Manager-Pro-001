@@ -1,5 +1,5 @@
 import userModel from "../modals/user.model.js";
-import { generateAccessTokenService, loginService, registerService } from "../services/auth.service.js";
+import { generateAccessTokenService, googleCallbackService, loginService, registerService } from "../services/auth.service.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
 
 export const registerController = async (req, res, next) => {
@@ -32,7 +32,7 @@ export const registerController = async (req, res, next) => {
 
 export const loginController = async (req, res, next) => {
     try {
-        const {refreshToken, accessToken, user} = await loginService(req.body);
+        const { refreshToken, accessToken, user } = await loginService(req.body);
 
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
@@ -92,4 +92,25 @@ export const generateAccessTokenController = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
+
+export const googleCallbackController = async (req, res, next) => {
+    const { accessToken, refreshToken, user } = await googleCallbackService(req.user);
+
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+        maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
+
+
+    res.redirect('http://localhost:5173/home');
 }

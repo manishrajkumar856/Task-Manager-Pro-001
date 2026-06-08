@@ -16,7 +16,7 @@ const useAuth = () => {
     } = useForm();
 
     const onLoginSubmit = async (data) => {
-        
+
         dispatch(
             loginThunk({
                 email: data.email,
@@ -27,7 +27,7 @@ const useAuth = () => {
     }
 
     const onRegisterSubmit = async (data) => {
-            
+
         dispatch(
             registerThunk({
                 name: data.name,
@@ -42,6 +42,11 @@ const useAuth = () => {
         dispatch(getMeThunk());
     }
 
+    const continueWithGoogle = () => {
+        window.location.href =
+            "http://localhost:3000/api/auth/google";
+    }
+
 
     return {
         register,
@@ -50,7 +55,8 @@ const useAuth = () => {
         reset,
         onLoginSubmit,
         onRegisterSubmit,
-        getMeHandler
+        getMeHandler,
+        continueWithGoogle
     }
 }
 
